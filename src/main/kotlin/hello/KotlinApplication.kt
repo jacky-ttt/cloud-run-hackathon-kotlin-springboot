@@ -21,6 +21,9 @@ class KotlinApplication {
         POST("/**", accept(APPLICATION_JSON)) { request ->
             request.bodyToMono(ArenaUpdate::class.java).flatMap { arenaUpdate ->
                 println(arenaUpdate)
+
+                // TODO add your implementation here to replace the random response
+                
                 ServerResponse.ok().body(Mono.just(listOf("F", "R", "L", "T").random()))
             }
         }
