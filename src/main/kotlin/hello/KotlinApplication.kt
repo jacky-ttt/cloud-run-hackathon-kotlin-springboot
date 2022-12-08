@@ -428,6 +428,7 @@ class KotlinApplication {
 
                 highest = getHighestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
+                println("highest: ${highest.direction},${highest.x}, ${highest.y}")
 
                 val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(highest)
                 println("butt: $buttOrBestX, $buttOrBestY")
