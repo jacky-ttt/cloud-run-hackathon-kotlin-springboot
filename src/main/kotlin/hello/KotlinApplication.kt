@@ -301,10 +301,11 @@ class KotlinApplication {
 
                 val (buttX, buttY) = getButtOfPlayer(highest)
                 // TODO handle out of bound
+                println("butt: $buttX, $buttY")
 
                 val (path, cost) = aStarSearch(
                     start = GridPosition(myPlayerState.x, myPlayerState.y),
-                    finish = GridPosition(buttX, buttX),
+                    finish = GridPosition(buttX, buttY),
                     grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
                 )
 
