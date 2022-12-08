@@ -458,47 +458,59 @@ class KotlinApplication {
                     }
                 }
 
-
-                // find proper command---------------------------------------------------------------
-                val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(lowest)
-                println("butt: $buttOrBestX, $buttOrBestY")
-
-                val (path, cost) = aStarSearch(
-                    start = GridPosition(myPlayerState.x, myPlayerState.y),
-                    finish = GridPosition(buttOrBestX, buttOrBestY),
-                    grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
-                )
-
-                println("Cost: $cost  Path: $path")
-                // Cost: 14  Path: [(0, 0), (1, 0), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (7, 6), (7, 7)]
-
-                if (path.isNotEmpty() && path.size == 1 && cost == 0) {
-                    // reach target
-                    val rotateCommand = getRotateCommandPointingToTargetPlayer(Pair(highest.x, highest.y))
-
-                    val command = rotateCommand ?: "T"
-                    return@flatMap ServerResponse.ok().body(Mono.just(command))
-                } else if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
-                    val nextPosition = path[1]
-                    val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
-
-                    val command = rotateCommand ?: "F"
-                    return@flatMap ServerResponse.ok().body(Mono.just(command))
-                } else {
-                    // cannot find path to highest, find the closest target
-                    val hasFrontEnemy = hasFrontEnemy()
-                    println("hasFrontEnemy $hasFrontEnemy")
-                    return@flatMap if (hasFrontEnemy) {
-                        ServerResponse.ok().body(Mono.just("T"))
-                    } else {
-                        // find the closest target
-                        val closest = getClosestPlayer()
-                        val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
-
-                        val command = rotateCommand ?: "F"
-                        return@flatMap ServerResponse.ok().body(Mono.just(command))
-                    }
+                if (hasFrontEnemy()) {
+                    println("hasFrontEnemy true")
+                    return@flatMap ServerResponse.ok().body(Mono.just("T"))
                 }
+
+                // find the closest target
+                val closest = getClosestPlayer()
+                val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
+
+                val command = rotateCommand ?: "F"
+                return@flatMap ServerResponse.ok().body(Mono.just(command))
+
+
+//                // find proper command---------------------------------------------------------------
+//                val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(lowest)
+//                println("butt: $buttOrBestX, $buttOrBestY")
+//
+//                val (path, cost) = aStarSearch(
+//                    start = GridPosition(myPlayerState.x, myPlayerState.y),
+//                    finish = GridPosition(buttOrBestX, buttOrBestY),
+//                    grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
+//                )
+//
+//                println("Cost: $cost  Path: $path")
+//                // Cost: 14  Path: [(0, 0), (1, 0), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (7, 6), (7, 7)]
+//
+//                if (path.isNotEmpty() && path.size == 1 && cost == 0) {
+//                    // reach target
+//                    val rotateCommand = getRotateCommandPointingToTargetPlayer(Pair(highest.x, highest.y))
+//
+//                    val command = rotateCommand ?: "T"
+//                    return@flatMap ServerResponse.ok().body(Mono.just(command))
+//                } else if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
+//                    val nextPosition = path[1]
+//                    val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
+//
+//                    val command = rotateCommand ?: "F"
+//                    return@flatMap ServerResponse.ok().body(Mono.just(command))
+//                } else {
+//                    // cannot find path to highest, find the closest target
+//                    val hasFrontEnemy = hasFrontEnemy()
+//                    println("hasFrontEnemy $hasFrontEnemy")
+//                    return@flatMap if (hasFrontEnemy) {
+//                        ServerResponse.ok().body(Mono.just("T"))
+//                    } else {
+//                        // find the closest target
+//                        val closest = getClosestPlayer()
+//                        val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
+//
+//                        val command = rotateCommand ?: "F"
+//                        return@flatMap ServerResponse.ok().body(Mono.just(command))
+//                    }
+//                }
 
 //                if (myLocationWasHit) {
 //                    // move to available space
