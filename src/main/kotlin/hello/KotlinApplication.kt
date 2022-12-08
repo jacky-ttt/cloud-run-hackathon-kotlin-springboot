@@ -179,33 +179,23 @@ class KotlinApplication {
 
     data class Coordinate(val x: Int, val y: Int)
 
+    fun getButtOfPlayer(player: PlayerState): Coordinate {
+        return when (player.direction) {
+            "N" -> Coordinate(x = player.x, y = player.y + 1)
+            "E" -> Coordinate(x = player.x - 1, y = player.y)
+            "S" -> Coordinate(x = player.x, y = player.y - 1)
+            "W" -> Coordinate(x = player.x + 1, y = player.y)
+            else -> Coordinate(x = -1, y = -1)
+        }
+    }
+
     fun getCommandPointingToHighestScorePlayer(
         myPlayerState: PlayerState,
         highestPlayerState: PlayerState
     ): String? {
         val highest = highestPlayerState
 
-        val (buttX, buttY) = when (highest.direction) {
-            "N" -> {
-                Coordinate(highest.x, highest.y + 1)
-            }
-
-            "E" -> {
-                Coordinate(highest.x - 1, highest.y)
-            }
-
-            "S" -> {
-                Coordinate(highest.x, highest.y - 1)
-            }
-
-            "W" -> {
-                Coordinate(highest.x + 1, highest.y)
-            }
-
-            else -> {
-                Coordinate(-1, -1)
-            }
-        }
+        val (buttX, buttY) = getButtOfPlayer(highest)
 
         val rotateCommand: String? = if (buttX < myPlayerState.x) {
             // go left, L + F
