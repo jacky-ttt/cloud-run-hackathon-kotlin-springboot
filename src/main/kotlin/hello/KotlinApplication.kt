@@ -279,8 +279,8 @@ class KotlinApplication {
 
         POST("/**", accept(APPLICATION_JSON)) { request ->
             request.bodyToMono(ArenaUpdate::class.java).flatMap { arenaUpdate ->
-                println(Gson().toJson(arenaUpdate))
-                println(arenaUpdate)
+                println("arenaUpdate: ${Gson().toJson(arenaUpdate)}")
+//                println(arenaUpdate)
 
                 // update variables
                 mySelf = arenaUpdate._links.self.href
@@ -291,10 +291,10 @@ class KotlinApplication {
                 myPlayerState = stateMap[mySelf]
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
-                println(Gson().toJson(myPlayerState))
-                println(myPlayerState)
-                println(arenaX)
-                println(arenaY)
+                println("myPlayerState: ${Gson().toJson(myPlayerState)}")
+//                println(Gson().toJson(myPlayerState))
+//                println(myPlayerState)
+                println("arena: $arenaX, $arenaY")
 
                 highest = getHighestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
