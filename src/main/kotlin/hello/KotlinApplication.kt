@@ -1,5 +1,6 @@
 package hello
 
+import com.google.gson.Gson
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -137,7 +138,7 @@ class KotlinApplication {
 
         POST("/**", accept(APPLICATION_JSON)) { request ->
             request.bodyToMono(ArenaUpdate::class.java).flatMap { arenaUpdate ->
-                println(arenaUpdate)
+                println(Gson().toJson(arenaUpdate))
 
                 val mySelf = arenaUpdate._links.self.href
                 val arenaSize = arenaUpdate.arena.dims
@@ -147,54 +148,57 @@ class KotlinApplication {
                 val myLocation =
                     stateMap[mySelf] ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
-                println(myLocation)
+                println(Gson().toJson(myLocation))
 
                 val myLocationX = myLocation.x
                 val myLocationY = myLocation.y
                 val myLocationDirection = myLocation.direction
                 val myLocationWasHit = myLocation.wasHit
-                if (myLocationWasHit) {
-                    // move to available space
-                    if (isFrontAvailable(
-                            stateMap = stateMap,
-                            myLocationDirection = myLocationDirection,
-                            myLocationX = myLocationX,
-                            myLocationY = myLocationY,
-                            arenaX = arenaX,
-                            arenaY = arenaY
-                        )
-                    ) {
-                        return@flatMap ServerResponse.ok().body(Mono.just("F"))
-                    } else {
-                        return@flatMap ServerResponse.ok().body(Mono.just("R"))
-                    }
-                }
 
-                var hasFrontEnemy = hasFrontEnemy(
-                    stateMap = stateMap,
-                    myLocationDirection = myLocationDirection,
-                    myLocationX = myLocationX,
-                    myLocationY = myLocationY,
-                    arenaX = arenaX,
-                    arenaY = arenaY
-                )
-                return@flatMap if (hasFrontEnemy) {
-                    ServerResponse.ok().body(Mono.just("T"))
-                } else {
-                    if (isFrontAvailable(
-                            stateMap = stateMap,
-                            myLocationDirection = myLocationDirection,
-                            myLocationX = myLocationX,
-                            myLocationY = myLocationY,
-                            arenaX = arenaX,
-                            arenaY = arenaY
-                        )
-                    ) {
-                        ServerResponse.ok().body(Mono.just("F"))
-                    } else {
-                        ServerResponse.ok().body(Mono.just("R"))
-                    }
-                }
+
+                ServerResponse.ok().body(Mono.just("T"))
+//                if (myLocationWasHit) {
+//                    // move to available space
+//                    if (isFrontAvailable(
+//                            stateMap = stateMap,
+//                            myLocationDirection = myLocationDirection,
+//                            myLocationX = myLocationX,
+//                            myLocationY = myLocationY,
+//                            arenaX = arenaX,
+//                            arenaY = arenaY
+//                        )
+//                    ) {
+//                        return@flatMap ServerResponse.ok().body(Mono.just("F"))
+//                    } else {
+//                        return@flatMap ServerResponse.ok().body(Mono.just("R"))
+//                    }
+//                }
+//
+//                var hasFrontEnemy = hasFrontEnemy(
+//                    stateMap = stateMap,
+//                    myLocationDirection = myLocationDirection,
+//                    myLocationX = myLocationX,
+//                    myLocationY = myLocationY,
+//                    arenaX = arenaX,
+//                    arenaY = arenaY
+//                )
+//                return@flatMap if (hasFrontEnemy) {
+//                    ServerResponse.ok().body(Mono.just("T"))
+//                } else {
+//                    if (isFrontAvailable(
+//                            stateMap = stateMap,
+//                            myLocationDirection = myLocationDirection,
+//                            myLocationX = myLocationX,
+//                            myLocationY = myLocationY,
+//                            arenaX = arenaX,
+//                            arenaY = arenaY
+//                        )
+//                    ) {
+//                        ServerResponse.ok().body(Mono.just("F"))
+//                    } else {
+//                        ServerResponse.ok().body(Mono.just("R"))
+//                    }
+//                }
             }
         }
     }
