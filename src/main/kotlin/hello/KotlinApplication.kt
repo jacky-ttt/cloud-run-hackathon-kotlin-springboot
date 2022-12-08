@@ -154,7 +154,7 @@ class KotlinApplication {
 
                 println(Gson().toJson(myPlayerState))
                 println(myPlayerState)
-
+                return@flatMap ServerResponse.ok().body(Mono.just("F"))
 
 //                if (myLocationWasHit) {
 //                    // move to available space
@@ -173,28 +173,28 @@ class KotlinApplication {
 //                    }
 //                }
 
-                var hasFrontEnemy = hasFrontEnemy(
-                    stateMap = stateMap,
-                    myPlayerState = myPlayerState,
-                    arenaX = arenaX,
-                    arenaY = arenaY
-                )
-                println("hasFrontEnemy $hasFrontEnemy")
-                return@flatMap if (hasFrontEnemy) {
-                    ServerResponse.ok().body(Mono.just("T"))
-                } else {
-                    if (isFrontAvailable(
-                            stateMap = stateMap,
-                            myPlayerState = myPlayerState,
-                            arenaX = arenaX,
-                            arenaY = arenaY
-                        )
-                    ) {
-                        ServerResponse.ok().body(Mono.just("F"))
-                    } else {
-                        ServerResponse.ok().body(Mono.just("R"))
-                    }
-                }
+//                var hasFrontEnemy = hasFrontEnemy(
+//                    stateMap = stateMap,
+//                    myPlayerState = myPlayerState,
+//                    arenaX = arenaX,
+//                    arenaY = arenaY
+//                )
+//                println("hasFrontEnemy $hasFrontEnemy")
+//                return@flatMap if (hasFrontEnemy) {
+//                    ServerResponse.ok().body(Mono.just("T"))
+//                } else {
+//                    if (isFrontAvailable(
+//                            stateMap = stateMap,
+//                            myPlayerState = myPlayerState,
+//                            arenaX = arenaX,
+//                            arenaY = arenaY
+//                        )
+//                    ) {
+//                        ServerResponse.ok().body(Mono.just("F"))
+//                    } else {
+//                        ServerResponse.ok().body(Mono.just("R"))
+//                    }
+//                }
             }
         }
     }
