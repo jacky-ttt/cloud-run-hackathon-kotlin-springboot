@@ -181,9 +181,9 @@ class KotlinApplication {
 
     fun getCommandPointingToHighestScorePlayer(
         myPlayerState: PlayerState,
-        stateMap: Map<String, PlayerState>
+        highestPlayerState: PlayerState
     ): String? {
-        val highest = getHighestScorePlayerOrNull(stateMap) ?: return "R"
+        val highest = highestPlayerState
 
         val (buttX, buttY) = when (highest.direction) {
             "N" -> {
@@ -279,6 +279,9 @@ class KotlinApplication {
                 println(arenaX)
                 println(arenaY)
 
+                val highest = getHighestScorePlayerOrNull(stateMap)
+                    ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
+
 
 //                if (myLocationWasHit) {
 //                    // move to available space
@@ -321,7 +324,7 @@ class KotlinApplication {
 ////                    }
 //                }
 
-                val rotateCommand = getCommandPointingToHighestScorePlayer(myPlayerState, stateMap)
+                val rotateCommand = getCommandPointingToHighestScorePlayer(myPlayerState, highest)
 
                 val command = rotateCommand ?: if (hasFrontEnemy(
                         stateMap = stateMap,
