@@ -103,7 +103,7 @@ fun aStarSearch(start: GridPosition, finish: GridPosition, grid: Grid): Pair<Lis
 
     }
 
-    return Pair<List<GridPosition>, Int>(emptyList(), -1)
+    return Pair<List<GridPosition>, Int>(emptyList(), Int.MAX_VALUE)
 }
 
 //fun main(args: Array<String>) {

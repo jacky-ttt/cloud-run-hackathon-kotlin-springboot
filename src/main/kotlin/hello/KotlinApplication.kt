@@ -175,12 +175,91 @@ class KotlinApplication {
     data class Coordinate(val x: Int, val y: Int)
 
     fun getButtOfPlayer(player: PlayerState): Coordinate {
+        // N->E->S->W
+        // val delta = listOf(Pair(0, 1), Pair(-1, 0), Pair(0, -1), Pair(1, 0))
         return when (player.direction) {
             "N" -> Coordinate(x = player.x, y = player.y + 1)
             "E" -> Coordinate(x = player.x - 1, y = player.y)
             "S" -> Coordinate(x = player.x, y = player.y - 1)
             "W" -> Coordinate(x = player.x + 1, y = player.y)
             else -> Coordinate(x = -1, y = -1)
+        }
+    }
+
+    fun getRightOfPlayer(player: PlayerState): Coordinate {
+        return when (player.direction) {
+            "N" -> Coordinate(x = player.x + 1, y = player.y)
+            "E" -> Coordinate(x = player.x, y = player.y + 1)
+            "S" -> Coordinate(x = player.x - 1, y = player.y)
+            "W" -> Coordinate(x = player.x, y = player.y - 1)
+            else -> Coordinate(x = -1, y = -1)
+        }
+    }
+
+    fun getLeftOfPlayer(player: PlayerState): Coordinate {
+        return when (player.direction) {
+            "N" -> Coordinate(x = player.x - 1, y = player.y)
+            "E" -> Coordinate(x = player.x, y = player.y - 1)
+            "S" -> Coordinate(x = player.x + 1, y = player.y)
+            "W" -> Coordinate(x = player.x, y = player.y + 1)
+            else -> Coordinate(x = -1, y = -1)
+        }
+    }
+
+    fun getFrontOfPlayer(player: PlayerState): Coordinate {
+        return when (player.direction) {
+            "N" -> Coordinate(x = player.x, y = player.y - 1)
+            "E" -> Coordinate(x = player.x + 1, y = player.y)
+            "S" -> Coordinate(x = player.x, y = player.y + 1)
+            "W" -> Coordinate(x = player.x - 1, y = player.y)
+            else -> Coordinate(x = -1, y = -1)
+        }
+    }
+
+    fun isValidCoordinate(coordinate: Coordinate): Boolean {
+        return (coordinate.x in 1 until arenaX && coordinate.y in 1 until arenaY)
+    }
+
+    fun getButtOrNextBestOfPlayer(player: PlayerState): Coordinate {
+        // behind > right > left > front
+        val butt = getButtOfPlayer(player)
+        val (buttX, buttY) = butt
+
+        if (isValidCoordinate(butt)) {
+            return Coordinate(buttX, buttY)
+        }
+
+
+        val right = getRightOfPlayer(player)
+        val (rightX, rightY) = right
+        val (rightPath, rightCost) = if (isValidCoordinate(right)) {
+            Pair(emptyList(), Int.MAX_VALUE)
+        } else aStarSearch(
+            start = GridPosition(myPlayerState.x, myPlayerState.y),
+            finish = GridPosition(rightX, rightY),
+            grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
+        )
+
+        val left = getLeftOfPlayer(player)
+        val (leftX, leftY) = left
+        val (leftPath, leftCost) = if (isValidCoordinate(left)) {
+            Pair(emptyList(), Int.MAX_VALUE)
+        } else aStarSearch(
+            start = GridPosition(myPlayerState.x, myPlayerState.y),
+            finish = GridPosition(leftX, leftY),
+            grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
+        )
+
+        return if (rightCost != Int.MAX_VALUE && rightCost >= leftCost) {
+            // choose right
+            Coordinate(rightX, rightY)
+        } else if (leftCost != Int.MAX_VALUE) {
+            // choose left
+            Coordinate(leftX, leftY)
+        } else {
+            // choose front
+            val (frontX, frontY) = getFrontOfPlayer(player)
+            Coordinate(frontX, frontY)
         }
     }
 
@@ -350,13 +429,12 @@ class KotlinApplication {
                 highest = getHighestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
-                val (buttX, buttY) = getButtOfPlayer(highest)
-                // TODO handle out of bound
-                println("butt: $buttX, $buttY")
+                val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(highest)
+                println("butt: $buttOrBestX, $buttOrBestY")
 
                 val (path, cost) = aStarSearch(
                     start = GridPosition(myPlayerState.x, myPlayerState.y),
-                    finish = GridPosition(buttX, buttY),
+                    finish = GridPosition(buttOrBestX, buttOrBestY),
                     grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
                 )
 
