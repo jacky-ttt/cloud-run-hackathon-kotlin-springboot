@@ -445,7 +445,7 @@ class KotlinApplication {
 
                     val command = rotateCommand ?: "T"
                     return@flatMap ServerResponse.ok().body(Mono.just(command))
-                } else if (path.isNotEmpty() && path.size >= 2 && cost > 0) {
+                } else if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
                     val nextPosition = path[1]
                     val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
 
