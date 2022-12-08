@@ -250,7 +250,7 @@ class KotlinApplication {
             grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
         )
 
-        return if (rightCost != Int.MAX_VALUE && rightCost >= leftCost) {
+        return if (rightCost != Int.MAX_VALUE && rightCost <= leftCost) {
             // choose right
             Coordinate(rightX, rightY)
         } else if (leftCost != Int.MAX_VALUE) {
