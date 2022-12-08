@@ -441,8 +441,10 @@ class KotlinApplication {
 
                 if (path.isNotEmpty() && path.size == 1 && cost == 0) {
                     // reach target
-                    // TODO target butt
-                    return@flatMap ServerResponse.ok().body(Mono.just("T"))
+                    val rotateCommand = getRotateCommandPointingToTargetPlayer(Pair(highest.x, highest.y))
+
+                    val command = rotateCommand ?: "T"
+                    return@flatMap ServerResponse.ok().body(Mono.just(command))
                 } else if (path.isNotEmpty() && path.size >= 2 && cost > 0) {
                     val nextPosition = path[1]
                     val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
