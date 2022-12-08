@@ -16,8 +16,6 @@ class KotlinApplication {
 
     fun findEnemyAt(stateMap: Map<String, PlayerState>, x: Int, y: Int): Boolean {
         for ((key, value) in stateMap) {
-            // println(key)
-            // println(value)
             if (value.x == x && value.y == y) {
                 return true
             }
@@ -32,18 +30,18 @@ class KotlinApplication {
         arenaX: Int,
         arenaY: Int
     ): Boolean {
-        var hasFrontEnemy = false
         val myLocationDirection = myPlayerState.direction
         val myLocationX = myPlayerState.x
         val myLocationY = myPlayerState.y
+        val detectRange = 3
 
         when (myLocationDirection) {
             "N" -> {
                 if (myLocationY == 0) {
                     return false
                 }
-                val minY = min(0, myLocationY - 1)
-                for (y in myLocationY - 1 downTo minY) {
+                val maxY = max(0, myLocationY - detectRange)
+                for (y in myLocationY - 1 downTo maxY) {
                     if (findEnemyAt(stateMap = stateMap, x = myLocationX, y = y)) {
                         return true
                     }
@@ -54,8 +52,8 @@ class KotlinApplication {
                 if (myLocationX == arenaX - 1) {
                     return false
                 }
-                val maxX = max(arenaX, myLocationX + 1)
-                for (x in (myLocationX + 1) until maxX) {
+                val minX = min(arenaX - 1, myLocationX + detectRange)
+                for (x in (myLocationX + 1)..minX) {
                     if (findEnemyAt(stateMap = stateMap, x = x, y = myLocationY)) {
                         return true
                     }
@@ -66,8 +64,8 @@ class KotlinApplication {
                 if (myLocationY == arenaY - 1) {
                     return false
                 }
-                val maxY = max(arenaX, myLocationY + 1)
-                for (y in myLocationY + 1 until maxY) {
+                val minY = min(arenaY - 1, myLocationY + detectRange)
+                for (y in myLocationY + 1..minY) {
                     if (findEnemyAt(stateMap = stateMap, x = myLocationX, y = y)) {
                         return true
                     }
@@ -78,15 +76,15 @@ class KotlinApplication {
                 if (myLocationX == 0) {
                     return false
                 }
-                val minX = min(0, myLocationX - 1)
-                for (x in (myLocationX - 1) downTo minX) {
+                val maxX = max(0, myLocationX - detectRange)
+                for (x in (myLocationX - 1) downTo maxX) {
                     if (findEnemyAt(stateMap = stateMap, x = x, y = myLocationY)) {
                         return true
                     }
                 }
             }
         }
-        return hasFrontEnemy
+        return false
     }
 
     fun isFrontAvailable(
