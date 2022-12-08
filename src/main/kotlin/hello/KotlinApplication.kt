@@ -156,9 +156,16 @@ class KotlinApplication {
                 val myLocationY = myLocation.y
                 val myLocationDirection = myLocation.direction
                 val myLocationWasHit = myLocation.wasHit
+                val myLocationScore = myLocation.score
+//                {
+//                    "x": 4,
+//                    "direction": "N",
+//                    "score": -427,
+//                    "wasHit": true,
+//                    "y": 11
+//                }
 
 
-                ServerResponse.ok().body(Mono.just("L"))
 //                if (myLocationWasHit) {
 //                    // move to available space
 //                    if (isFrontAvailable(
@@ -175,18 +182,19 @@ class KotlinApplication {
 //                        return@flatMap ServerResponse.ok().body(Mono.just("R"))
 //                    }
 //                }
-//
-//                var hasFrontEnemy = hasFrontEnemy(
-//                    stateMap = stateMap,
-//                    myLocationDirection = myLocationDirection,
-//                    myLocationX = myLocationX,
-//                    myLocationY = myLocationY,
-//                    arenaX = arenaX,
-//                    arenaY = arenaY
-//                )
-//                return@flatMap if (hasFrontEnemy) {
-//                    ServerResponse.ok().body(Mono.just("T"))
-//                } else {
+
+                var hasFrontEnemy = hasFrontEnemy(
+                    stateMap = stateMap,
+                    myLocationDirection = myLocationDirection,
+                    myLocationX = myLocationX,
+                    myLocationY = myLocationY,
+                    arenaX = arenaX,
+                    arenaY = arenaY
+                )
+                return@flatMap if (hasFrontEnemy) {
+                    ServerResponse.ok().body(Mono.just("T"))
+                } else {
+                    ServerResponse.ok().body(Mono.just("R"))
 //                    if (isFrontAvailable(
 //                            stateMap = stateMap,
 //                            myLocationDirection = myLocationDirection,
@@ -200,7 +208,7 @@ class KotlinApplication {
 //                    } else {
 //                        ServerResponse.ok().body(Mono.just("R"))
 //                    }
-//                }
+                }
             }
         }
     }
