@@ -142,6 +142,12 @@ class KotlinApplication {
         }?.value
     }
 
+    fun getLowestScorePlayerOrNull(): PlayerState? {
+        return stateMap.minByOrNull { (k, v) ->
+            v.score
+        }?.value
+    }
+
 //    fun findShortestMoveToHighestScorePlayer(state: Map<String, PlayerState>): Int {
 //        val highest = getHighestScorePlayerOrNull(state) ?: return 999
 //
@@ -408,6 +414,13 @@ class KotlinApplication {
         score = -1,
         wasHit = false
     )
+    var lowest: PlayerState = PlayerState(
+        x = -1,
+        y = -1,
+        direction = "N",
+        score = -1,
+        wasHit = false
+    )
     var stateMap: Map<String, PlayerState> = mapOf("-1" to myPlayerState)
     var arenaX = 0
     var arenaY = 0
@@ -441,9 +454,13 @@ class KotlinApplication {
                 highest = getHighestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
                 println("highest: ${highest.direction},${highest.x}, ${highest.y}")
+                lowest = getLowestScorePlayerOrNull()
+                    ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
+                println("lowest: ${lowest.direction},${lowest.x}, ${lowest.y}")
+
 
                 // find proper command---------------------------------------------------------------
-                val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(highest)
+                val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(lowest)
                 println("butt: $buttOrBestX, $buttOrBestY")
 
                 val (path, cost) = aStarSearch(
