@@ -91,16 +91,17 @@ class KotlinApplication {
 
     fun isFrontAvailable(
         stateMap: Map<String, PlayerState>,
-        myLocationDirection: String,
-        myLocationX: Int,
-        myLocationY: Int,
+        myPlayerState: PlayerState,
         arenaX: Int,
         arenaY: Int
     ): Boolean {
         var isFrontAvailable = false
+        val myLocationDirection = myPlayerState.direction
+        val myLocationX = myPlayerState.x
+        val myLocationY = myPlayerState.y
         var frontX = myLocationX
         var frontY = myLocationY
-        when (myLocationDirection) {
+        when (myPlayerState.direction) {
             "N" -> {
                 frontX = myLocationX
                 frontY = myLocationY - 1
@@ -185,9 +186,7 @@ class KotlinApplication {
                     ServerResponse.ok().body(Mono.just("R"))
 //                    if (isFrontAvailable(
 //                            stateMap = stateMap,
-//                            myLocationDirection = myLocationDirection,
-//                            myLocationX = myLocationX,
-//                            myLocationY = myLocationY,
+//                            myPlayerState = myPlayerState,
 //                            arenaX = arenaX,
 //                            arenaY = arenaY
 //                        )
