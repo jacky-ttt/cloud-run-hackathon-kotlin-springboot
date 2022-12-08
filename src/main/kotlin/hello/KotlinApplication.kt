@@ -454,7 +454,7 @@ class KotlinApplication {
                     if (isFrontAvailable()) {
                         return@flatMap ServerResponse.ok().body(Mono.just("F"))
                     } else {
-                        return@flatMap ServerResponse.ok().body(Mono.just("R"))
+                        return@flatMap ServerResponse.ok().body(Mono.just(listOf("R", "L").random()))
                     }
                 }
 
