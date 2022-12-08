@@ -24,12 +24,7 @@ class KotlinApplication {
         return false
     }
 
-    fun hasFrontEnemy(
-        stateMap: Map<String, PlayerState>,
-        myPlayerState: PlayerState,
-        arenaX: Int,
-        arenaY: Int
-    ): Boolean {
+    fun hasFrontEnemy(): Boolean {
         val myLocationDirection = myPlayerState.direction
         val myLocationX = myPlayerState.x
         val myLocationY = myPlayerState.y
@@ -190,11 +185,7 @@ class KotlinApplication {
     }
 
     fun getCommandPointingToHighestScorePlayer(
-        myPlayerState: PlayerState,
-        highestPlayerState: PlayerState
     ): String? {
-        val highest = highestPlayerState
-
         val (buttX, buttY) = getButtOfPlayer(highest)
 
         val rotateCommand: String? = if (buttX < myPlayerState.x) {
@@ -245,6 +236,24 @@ class KotlinApplication {
         return rotateCommand
     }
 
+    var myPlayerState: PlayerState = PlayerState(
+        x = -1,
+        y = -1,
+        direction = "N",
+        score = -1,
+        wasHit = false
+    )
+    var highest: PlayerState = PlayerState(
+        x = -1,
+        y = -1,
+        direction = "N",
+        score = -1,
+        wasHit = false
+    )
+    var stateMap: Map<String, PlayerState> = mapOf("-1" to myPlayerState)
+    var arenaX = 0
+    var arenaY = 0
+
     @Bean
     fun routes() = router {
         GET {
@@ -256,20 +265,21 @@ class KotlinApplication {
                 println(Gson().toJson(arenaUpdate))
                 println(arenaUpdate)
 
+                // update variables
                 val mySelf = arenaUpdate._links.self.href
                 val arenaSize = arenaUpdate.arena.dims
-                val arenaX = arenaSize[0]
-                val arenaY = arenaSize[1]
-                val stateMap = arenaUpdate.arena.state
-                val myPlayerState =
-                    stateMap[mySelf] ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
+                arenaX = arenaSize[0]
+                arenaY = arenaSize[1]
+                stateMap = arenaUpdate.arena.state
+                myPlayerState = stateMap[mySelf]
+                    ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
                 println(Gson().toJson(myPlayerState))
                 println(myPlayerState)
                 println(arenaX)
                 println(arenaY)
 
-                val highest = getHighestScorePlayerOrNull(stateMap)
+                highest = getHighestScorePlayerOrNull(stateMap)
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
 
@@ -314,15 +324,10 @@ class KotlinApplication {
 ////                    }
 //                }
 
-                val rotateCommand = getCommandPointingToHighestScorePlayer(myPlayerState, highest)
+                // find proper command
+                val rotateCommand = getCommandPointingToHighestScorePlayer()
 
-                val command = rotateCommand ?: if (hasFrontEnemy(
-                        stateMap = stateMap,
-                        myPlayerState = myPlayerState,
-                        arenaX = arenaX,
-                        arenaY = arenaY
-                    )
-                ) "T" else "F"
+                val command = rotateCommand ?: if (hasFrontEnemy()) "T" else "F"
 
                 return@flatMap ServerResponse.ok().body(Mono.just(command))
             }
