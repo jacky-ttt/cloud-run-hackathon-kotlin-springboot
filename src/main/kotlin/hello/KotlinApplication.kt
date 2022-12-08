@@ -424,14 +424,6 @@ class KotlinApplication {
 
                 highest = getHighestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
-                val dummy = PlayerState(
-                    x = 14,
-                    y = 11,
-                    direction = "N",
-                    score = 9999,
-                    wasHit = false
-                )
-                highest = dummy
                 println("highest: ${highest.direction},${highest.x}, ${highest.y}")
 
                 // find proper command---------------------------------------------------------------
