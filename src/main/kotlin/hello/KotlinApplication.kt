@@ -144,7 +144,7 @@ class KotlinApplication {
                 val mySelf = arenaUpdate._links.self.href
                 val arenaSize = arenaUpdate.arena.dims
                 val arenaX = arenaSize[0]
-                val arenaY = arenaSize[0]
+                val arenaY = arenaSize[1]
                 val stateMap = arenaUpdate.arena.state
                 val myLocation =
                     stateMap[mySelf] ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
