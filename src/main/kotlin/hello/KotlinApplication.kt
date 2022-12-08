@@ -154,7 +154,7 @@ class KotlinApplication {
 
                 println(Gson().toJson(myPlayerState))
                 println(myPlayerState)
-                return@flatMap ServerResponse.ok().body(Mono.just("F"))
+                return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
 //                if (myLocationWasHit) {
 //                    // move to available space
