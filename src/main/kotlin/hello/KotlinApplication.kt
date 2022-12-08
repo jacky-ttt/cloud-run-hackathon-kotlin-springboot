@@ -310,6 +310,22 @@ class KotlinApplication {
                 )
 
                 println("Cost: $cost  Path: $path")
+                // Cost: 14  Path: [(0, 0), (1, 0), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (7, 6), (7, 7)]
+
+                if (path.isNotEmpty() && path.size == 1 && cost == 0) {
+                    // reach target
+                    // TODO target butt
+                    return@flatMap ServerResponse.ok().body(Mono.just("T"))
+                } else if (path.isNotEmpty() && path.size >= 2 && cost > 0) {
+                    val nextPosition = path[1]
+                    val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
+
+                    val command = rotateCommand ?: "F"
+                    return@flatMap ServerResponse.ok().body(Mono.just(command))
+                } else {
+                    // cannot find path
+                    return@flatMap ServerResponse.ok().body(Mono.just("T"))
+                }
 
 //                if (myLocationWasHit) {
 //                    // move to available space
@@ -352,12 +368,12 @@ class KotlinApplication {
 ////                    }
 //                }
 
-                // find proper command
-                val rotateCommand = getCommandPointingToHighestScorePlayer()
-
-                val command = rotateCommand ?: if (hasFrontEnemy()) "T" else "F"
-
-                return@flatMap ServerResponse.ok().body(Mono.just(command))
+//                // find proper command
+//                val rotateCommand = getCommandPointingToHighestScorePlayer()
+//
+//                val command = rotateCommand ?: if (hasFrontEnemy()) "T" else "F"
+//
+//                return@flatMap ServerResponse.ok().body(Mono.just(command))
             }
         }
     }
