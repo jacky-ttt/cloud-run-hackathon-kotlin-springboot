@@ -157,6 +157,7 @@ class KotlinApplication {
                 println(arenaX)
                 println(arenaY)
 
+                return@flatMap ServerResponse.ok().body(Mono.just("R"))
 
 //                if (myLocationWasHit) {
 //                    // move to available space
