@@ -252,6 +252,57 @@ class KotlinApplication {
         return listOf(pointSet)
     }
 
+    fun getRotateCommandPointingToTargetPlayer(position: GridPosition): String? {
+        val (targetX, targetY) = position
+
+        val rotateCommand: String? = if (targetX < myPlayerState.x) {
+            // go left, L + F
+            when (myPlayerState.direction) {
+                "N" -> "L"
+                "E" -> "R"
+                "S" -> "R"
+                "W" -> null
+                else -> null
+            }
+        } else if (targetX > myPlayerState.x) {
+            // go right, R + F
+            when (myPlayerState.direction) {
+                "N" -> "R"
+                "E" -> null
+                "S" -> "L"
+                "W" -> "R"
+                else -> null
+            }
+
+        } else if (targetY < myPlayerState.y) {
+            // go top, F
+
+            when (myPlayerState.direction) {
+                "N" -> null
+                "E" -> "L"
+                "S" -> "R"
+                "W" -> "R"
+                else -> null
+            }
+
+        } else if (targetY > myPlayerState.y) {
+            // go bottom
+            when (myPlayerState.direction) {
+                "N" -> "R"
+                "E" -> "R"
+                "S" -> null
+                "W" -> "L"
+                else -> null
+            }
+
+        } else {
+            // do nothing, boc x==y
+            null
+        }
+
+        return rotateCommand
+    }
+
     var myPlayerState: PlayerState = PlayerState(
         x = -1,
         y = -1,
