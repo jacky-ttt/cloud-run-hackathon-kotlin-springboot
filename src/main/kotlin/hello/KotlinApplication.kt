@@ -232,9 +232,7 @@ class KotlinApplication {
 
         val right = getRightOfPlayer(player)
         val (rightX, rightY) = right
-        val (rightPath, rightCost) = if (isValidCoordinate(right)) {
-            Pair(emptyList(), Int.MAX_VALUE)
-        } else aStarSearch(
+        val (rightPath, rightCost) = aStarSearch(
             start = GridPosition(myPlayerState.x, myPlayerState.y),
             finish = GridPosition(rightX, rightY),
             grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
@@ -242,9 +240,7 @@ class KotlinApplication {
 
         val left = getLeftOfPlayer(player)
         val (leftX, leftY) = left
-        val (leftPath, leftCost) = if (isValidCoordinate(left)) {
-            Pair(emptyList(), Int.MAX_VALUE)
-        } else aStarSearch(
+        val (leftPath, leftCost) = aStarSearch(
             start = GridPosition(myPlayerState.x, myPlayerState.y),
             finish = GridPosition(leftX, leftY),
             grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
