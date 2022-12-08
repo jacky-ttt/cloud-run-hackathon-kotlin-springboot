@@ -136,7 +136,7 @@ class KotlinApplication {
 //        return true
 //    }
 
-    fun getHighestScorePlayerOrNull(stateMap: Map<String, PlayerState>): PlayerState? {
+    fun getHighestScorePlayerOrNull(): PlayerState? {
         return stateMap.maxByOrNull { (k, v) ->
             v.score
         }?.value
@@ -184,8 +184,7 @@ class KotlinApplication {
         }
     }
 
-    fun getCommandPointingToHighestScorePlayer(
-    ): String? {
+    fun getCommandPointingToHighestScorePlayer(): String? {
         val (buttX, buttY) = getButtOfPlayer(highest)
 
         val rotateCommand: String? = if (buttX < myPlayerState.x) {
@@ -279,7 +278,7 @@ class KotlinApplication {
                 println(arenaX)
                 println(arenaY)
 
-                highest = getHighestScorePlayerOrNull(stateMap)
+                highest = getHighestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
 
