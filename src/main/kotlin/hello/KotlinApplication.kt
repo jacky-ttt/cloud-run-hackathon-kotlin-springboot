@@ -381,6 +381,19 @@ class KotlinApplication {
         return rotateCommand
     }
 
+    fun getClosestPlayer(): GridPosition {
+        var closest = stateMap.toList().filter { (k, v) ->
+            k != mySelf
+        }.minByOrNull { (k, v) ->
+            (sqrt(
+                ((v.x - myPlayerState.x) * (v.x - myPlayerState.x) +
+                        (v.y - myPlayerState.y) * (v.y - myPlayerState.y)).toDouble()
+            ))
+        }?.second
+        closest = closest ?: myPlayerState
+        return Pair(closest.x, closest.y)
+    }
+
     var myPlayerState: PlayerState = PlayerState(
         x = -1,
         y = -1,
@@ -455,8 +468,19 @@ class KotlinApplication {
                     val command = rotateCommand ?: "F"
                     return@flatMap ServerResponse.ok().body(Mono.just(command))
                 } else {
-                    // cannot find path
-                    return@flatMap ServerResponse.ok().body(Mono.just("T"))
+                    // cannot find path to highest, find the closest target
+                    val hasFrontEnemy = hasFrontEnemy()
+                    println("hasFrontEnemy $hasFrontEnemy")
+                    return@flatMap if (hasFrontEnemy) {
+                        ServerResponse.ok().body(Mono.just("T"))
+                    } else {
+                        // find the closest target
+                        val closest = getClosestPlayer()
+                        val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
+
+                        val command = rotateCommand ?: "F"
+                        return@flatMap ServerResponse.ok().body(Mono.just(command))
+                    }
                 }
 
 //                if (myLocationWasHit) {
