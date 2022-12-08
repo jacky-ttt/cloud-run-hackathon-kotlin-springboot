@@ -139,6 +139,7 @@ class KotlinApplication {
         POST("/**", accept(APPLICATION_JSON)) { request ->
             request.bodyToMono(ArenaUpdate::class.java).flatMap { arenaUpdate ->
                 println(Gson().toJson(arenaUpdate))
+                println(arenaUpdate)
 
                 val mySelf = arenaUpdate._links.self.href
                 val arenaSize = arenaUpdate.arena.dims
@@ -149,6 +150,7 @@ class KotlinApplication {
                     stateMap[mySelf] ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
                 println(Gson().toJson(myLocation))
+                println(myLocation)
 
                 val myLocationX = myLocation.x
                 val myLocationY = myLocation.y
