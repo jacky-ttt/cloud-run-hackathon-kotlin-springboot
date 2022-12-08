@@ -299,10 +299,12 @@ class KotlinApplication {
                 highest = getHighestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
+                val (buttX, buttY) = getButtOfPlayer(highest)
+                // TODO handle out of bound
 
                 val (path, cost) = aStarSearch(
                     start = GridPosition(myPlayerState.x, myPlayerState.y),
-                    finish = GridPosition(highest.x, highest.y),
+                    finish = GridPosition(buttX, buttX),
                     grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
                 )
 
