@@ -103,7 +103,7 @@ fun aStarSearch(start: GridPosition, finish: GridPosition, grid: Grid): Pair<Lis
 
     }
 
-    throw IllegalArgumentException("No Path from Start $start to Finish $finish")
+    return Pair<List<GridPosition>, Int>(emptyList(), -1)
 }
 
 fun main(args: Array<String>) {
