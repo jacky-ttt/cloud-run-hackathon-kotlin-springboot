@@ -224,11 +224,11 @@ class KotlinApplication {
         // behind > right > left > front
         val butt = getButtOfPlayer(player)
         val (buttX, buttY) = butt
-
-        if (isValidCoordinate(butt)) {
-            return Coordinate(buttX, buttY)
-        }
-
+        val (buttPath, buttCost) = aStarSearch(
+            start = GridPosition(myPlayerState.x, myPlayerState.y),
+            finish = GridPosition(buttX, buttY),
+            grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
+        )
 
         val right = getRightOfPlayer(player)
         val (rightX, rightY) = right
@@ -246,7 +246,10 @@ class KotlinApplication {
             grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
         )
 
-        return if (rightCost != Int.MAX_VALUE && rightCost <= leftCost) {
+        return if (buttCost != Int.MAX_VALUE && buttCost <= rightCost) {
+            // choose butt
+            Coordinate(buttX, buttY)
+        } else if (rightCost != Int.MAX_VALUE && rightCost <= leftCost) {
             // choose right
             Coordinate(rightX, rightY)
         } else if (leftCost != Int.MAX_VALUE) {
