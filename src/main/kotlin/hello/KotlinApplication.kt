@@ -141,8 +141,8 @@ class KotlinApplication {
 //        return true
 //    }
 
-    fun getHighestScorePlayerOrNull(state: Map<String, PlayerState>): PlayerState? {
-        return state.maxByOrNull { (k, v) ->
+    fun getHighestScorePlayerOrNull(stateMap: Map<String, PlayerState>): PlayerState? {
+        return stateMap.maxByOrNull { (k, v) ->
             v.score
         }?.value
     }
@@ -179,8 +179,11 @@ class KotlinApplication {
 
     data class Coordinate(val x: Int, val y: Int)
 
-    fun getCommandPointingToHighestScorePlayer(myPlayerState: PlayerState, state: Map<String, PlayerState>): String? {
-        val highest = getHighestScorePlayerOrNull(state) ?: return "R"
+    fun getCommandPointingToHighestScorePlayer(
+        myPlayerState: PlayerState,
+        stateMap: Map<String, PlayerState>
+    ): String? {
+        val highest = getHighestScorePlayerOrNull(stateMap) ?: return "R"
 
         val (buttX, buttY) = when (highest.direction) {
             "N" -> {
