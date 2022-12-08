@@ -28,13 +28,15 @@ class KotlinApplication {
 
     fun hasFrontEnemy(
         stateMap: Map<String, PlayerState>,
-        myLocationDirection: String,
-        myLocationX: Int,
-        myLocationY: Int,
+        myPlayerState: PlayerState,
         arenaX: Int,
         arenaY: Int
     ): Boolean {
         var hasFrontEnemy = false
+        val myLocationDirection = myPlayerState.direction
+        val myLocationX = myPlayerState.x
+        val myLocationY = myPlayerState.y
+
         when (myLocationDirection) {
             "N" -> {
                 if (myLocationY == 0) {
@@ -146,24 +148,11 @@ class KotlinApplication {
                 val arenaX = arenaSize[0]
                 val arenaY = arenaSize[1]
                 val stateMap = arenaUpdate.arena.state
-                val myLocation =
+                val myPlayerState =
                     stateMap[mySelf] ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
-                println(Gson().toJson(myLocation))
-                println(myLocation)
-
-                val myLocationX = myLocation.x
-                val myLocationY = myLocation.y
-                val myLocationDirection = myLocation.direction
-                val myLocationWasHit = myLocation.wasHit
-                val myLocationScore = myLocation.score
-//                {
-//                    "x": 4,
-//                    "direction": "N",
-//                    "score": -427,
-//                    "wasHit": true,
-//                    "y": 11
-//                }
+                println(Gson().toJson(myPlayerState))
+                println(myPlayerState)
 
 
 //                if (myLocationWasHit) {
@@ -185,9 +174,7 @@ class KotlinApplication {
 
                 var hasFrontEnemy = hasFrontEnemy(
                     stateMap = stateMap,
-                    myLocationDirection = myLocationDirection,
-                    myLocationX = myLocationX,
-                    myLocationY = myLocationY,
+                    myPlayerState = myPlayerState,
                     arenaX = arenaX,
                     arenaY = arenaY
                 )
