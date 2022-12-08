@@ -157,7 +157,6 @@ class KotlinApplication {
                 println(arenaX)
                 println(arenaY)
 
-                return@flatMap ServerResponse.ok().body(Mono.just("R"))
 
 //                if (myLocationWasHit) {
 //                    // move to available space
@@ -176,16 +175,17 @@ class KotlinApplication {
 //                    }
 //                }
 
-//                var hasFrontEnemy = hasFrontEnemy(
-//                    stateMap = stateMap,
-//                    myPlayerState = myPlayerState,
-//                    arenaX = arenaX,
-//                    arenaY = arenaY
-//                )
-//                println("hasFrontEnemy $hasFrontEnemy")
-//                return@flatMap if (hasFrontEnemy) {
-//                    ServerResponse.ok().body(Mono.just("T"))
-//                } else {
+                var hasFrontEnemy = hasFrontEnemy(
+                    stateMap = stateMap,
+                    myPlayerState = myPlayerState,
+                    arenaX = arenaX,
+                    arenaY = arenaY
+                )
+                println("hasFrontEnemy $hasFrontEnemy")
+                return@flatMap if (hasFrontEnemy) {
+                    ServerResponse.ok().body(Mono.just("T"))
+                } else {
+                    ServerResponse.ok().body(Mono.just("R"))
 //                    if (isFrontAvailable(
 //                            stateMap = stateMap,
 //                            myPlayerState = myPlayerState,
@@ -197,7 +197,7 @@ class KotlinApplication {
 //                    } else {
 //                        ServerResponse.ok().body(Mono.just("R"))
 //                    }
-//                }
+                }
             }
         }
     }
