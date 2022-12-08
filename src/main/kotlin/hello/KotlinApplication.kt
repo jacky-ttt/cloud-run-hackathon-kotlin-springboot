@@ -178,6 +178,7 @@ class KotlinApplication {
                     arenaX = arenaX,
                     arenaY = arenaY
                 )
+                println("hasFrontEnemy $hasFrontEnemy")
                 return@flatMap if (hasFrontEnemy) {
                     ServerResponse.ok().body(Mono.just("T"))
                 } else {
