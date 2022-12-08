@@ -235,6 +235,23 @@ class KotlinApplication {
         return rotateCommand
     }
 
+    fun getBarrierFromStateMap(): List<Barrier> {
+        val barriers = listOf(
+            setOf(
+                Pair(2, 4), Pair(2, 5), Pair(2, 6), Pair(3, 6), Pair(4, 6), Pair(5, 6), Pair(5, 5),
+                Pair(5, 4), Pair(5, 3), Pair(5, 2), Pair(4, 2), Pair(3, 2)
+            )
+        )
+
+        val pointSet = stateMap.filter { (k, v) ->
+            k != mySelf
+        }.map { (k, v) ->
+            Pair(v.x, v.y)
+        }.toSet()
+
+        return listOf(pointSet)
+    }
+
     var myPlayerState: PlayerState = PlayerState(
         x = -1,
         y = -1,
@@ -252,6 +269,7 @@ class KotlinApplication {
     var stateMap: Map<String, PlayerState> = mapOf("-1" to myPlayerState)
     var arenaX = 0
     var arenaY = 0
+    var mySelf = ""
 
     @Bean
     fun routes() = router {
@@ -265,7 +283,7 @@ class KotlinApplication {
                 println(arenaUpdate)
 
                 // update variables
-                val mySelf = arenaUpdate._links.self.href
+                mySelf = arenaUpdate._links.self.href
                 val arenaSize = arenaUpdate.arena.dims
                 arenaX = arenaSize[0]
                 arenaY = arenaSize[1]
@@ -281,6 +299,14 @@ class KotlinApplication {
                 highest = getHighestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
+
+                val (path, cost) = aStarSearch(
+                    start = GridPosition(myPlayerState.x, myPlayerState.y),
+                    finish = GridPosition(highest.x, highest.y),
+                    grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
+                )
+
+                println("Cost: $cost  Path: $path")
 
 //                if (myLocationWasHit) {
 //                    // move to available space
