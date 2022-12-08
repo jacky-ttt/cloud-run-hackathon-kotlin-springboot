@@ -133,6 +133,131 @@ class KotlinApplication {
         return !findEnemyAt(stateMap = stateMap, x = frontX, y = frontY)
     }
 
+//    fun isWorthTheEffort(myPlayerState: PlayerState, state: Map<String, PlayerState>): Boolean {
+//        val highest = getHighestScorePlayerOrNull(state) ?: return false
+//
+//        val scoreDiff = myPlayerState.score - (highest.score ?: 0)
+//        if (findShortestMoveToHighestScorePlayer() >= scoreDiff)
+//            return false
+//
+//        return true
+//    }
+
+    fun getHighestScorePlayerOrNull(state: Map<String, PlayerState>): PlayerState? {
+        return state.maxByOrNull { (k, v) ->
+            v.score
+        }?.value
+    }
+
+//    fun findShortestMoveToHighestScorePlayer(state: Map<String, PlayerState>): Int {
+//        val highest = getHighestScorePlayerOrNull(state) ?: return 999
+//
+//        val (buttX, buttY) = when (highest.direction) {
+//            "N" -> {
+//                Coordinate(highest.x, highest.y + 1)
+//            }
+//
+//            "E" -> {
+//                Coordinate(highest.x - 1, highest.y)
+//            }
+//
+//            "S" -> {
+//                Coordinate(highest.x, highest.y - 1)
+//            }
+//
+//            "W" -> {
+//                Coordinate(highest.x + 1, highest.y)
+//            }
+//
+//            else -> {
+//                Coordinate(-1, -1)
+//            }
+//        }
+//
+//
+//
+//        return 0
+//    }
+
+    data class Coordinate(val x: Int, val y: Int)
+
+    fun getCommandPointingToHighestScorePlayer(myPlayerState: PlayerState, state: Map<String, PlayerState>): String {
+        val highest = getHighestScorePlayerOrNull(state) ?: return "R"
+
+        val (buttX, buttY) = when (highest.direction) {
+            "N" -> {
+                Coordinate(highest.x, highest.y + 1)
+            }
+
+            "E" -> {
+                Coordinate(highest.x - 1, highest.y)
+            }
+
+            "S" -> {
+                Coordinate(highest.x, highest.y - 1)
+            }
+
+            "W" -> {
+                Coordinate(highest.x + 1, highest.y)
+            }
+
+            else -> {
+                Coordinate(-1, -1)
+            }
+        }
+
+        val rotateCommand: String? = if (buttX < myPlayerState.x) {
+            // go left, L + F
+            when (myPlayerState.direction) {
+                "N" -> "L"
+                "E" -> "R"
+                "S" -> "R"
+                "W" -> null
+                else -> null
+            }
+        } else if (buttX > myPlayerState.x) {
+            // go right, R + F
+            when (myPlayerState.direction) {
+                "N" -> "R"
+                "E" -> null
+                "S" -> "L"
+                "W" -> "R"
+                else -> null
+            }
+
+        } else if (buttY < myPlayerState.y) {
+            // go top, F
+
+            when (myPlayerState.direction) {
+                "N" -> null
+                "E" -> "L"
+                "S" -> "R"
+                "W" -> "R"
+                else -> null
+            }
+
+        } else if (buttY > myPlayerState.y) {
+            // go bottom
+            when (myPlayerState.direction) {
+                "N" -> "R"
+                "E" -> "R"
+                "S" -> null
+                "W" -> "L"
+                else -> null
+            }
+
+        } else {
+            // do nothing, boc x==y
+            null
+        }
+
+        if (rotateCommand != null) {
+            return rotateCommand
+        }
+
+        return "F"
+    }
+
     @Bean
     fun routes() = router {
         GET {
@@ -175,29 +300,32 @@ class KotlinApplication {
 //                    }
 //                }
 
-                var hasFrontEnemy = hasFrontEnemy(
-                    stateMap = stateMap,
-                    myPlayerState = myPlayerState,
-                    arenaX = arenaX,
-                    arenaY = arenaY
-                )
-                println("hasFrontEnemy $hasFrontEnemy")
-                return@flatMap if (hasFrontEnemy) {
-                    ServerResponse.ok().body(Mono.just("T"))
-                } else {
-                    ServerResponse.ok().body(Mono.just("R"))
-//                    if (isFrontAvailable(
-//                            stateMap = stateMap,
-//                            myPlayerState = myPlayerState,
-//                            arenaX = arenaX,
-//                            arenaY = arenaY
-//                        )
-//                    ) {
-//                        ServerResponse.ok().body(Mono.just("F"))
-//                    } else {
-//                        ServerResponse.ok().body(Mono.just("R"))
-//                    }
-                }
+//                var hasFrontEnemy = hasFrontEnemy(
+//                    stateMap = stateMap,
+//                    myPlayerState = myPlayerState,
+//                    arenaX = arenaX,
+//                    arenaY = arenaY
+//                )
+//                println("hasFrontEnemy $hasFrontEnemy")
+//                return@flatMap if (hasFrontEnemy) {
+//                    ServerResponse.ok().body(Mono.just("T"))
+//                } else {
+//                    ServerResponse.ok().body(Mono.just("R"))
+////                    if (isFrontAvailable(
+////                            stateMap = stateMap,
+////                            myPlayerState = myPlayerState,
+////                            arenaX = arenaX,
+////                            arenaY = arenaY
+////                        )
+////                    ) {
+////                        ServerResponse.ok().body(Mono.just("F"))
+////                    } else {
+////                        ServerResponse.ok().body(Mono.just("R"))
+////                    }
+//                }
+
+                val command = getCommandPointingToHighestScorePlayer(myPlayerState, stateMap)
+                return@flatMap ServerResponse.ok().body(Mono.just(command))
             }
         }
     }
