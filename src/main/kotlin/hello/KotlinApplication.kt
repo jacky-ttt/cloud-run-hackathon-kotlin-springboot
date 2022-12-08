@@ -179,7 +179,7 @@ class KotlinApplication {
 
     data class Coordinate(val x: Int, val y: Int)
 
-    fun getCommandPointingToHighestScorePlayer(myPlayerState: PlayerState, state: Map<String, PlayerState>): String {
+    fun getCommandPointingToHighestScorePlayer(myPlayerState: PlayerState, state: Map<String, PlayerState>): String? {
         val highest = getHighestScorePlayerOrNull(state) ?: return "R"
 
         val (buttX, buttY) = when (highest.direction) {
@@ -249,11 +249,7 @@ class KotlinApplication {
             null
         }
 
-        if (rotateCommand != null) {
-            return rotateCommand
-        }
-
-        return "F"
+        return rotateCommand
     }
 
     @Bean
@@ -322,7 +318,16 @@ class KotlinApplication {
 ////                    }
 //                }
 
-                val command = getCommandPointingToHighestScorePlayer(myPlayerState, stateMap)
+                val rotateCommand = getCommandPointingToHighestScorePlayer(myPlayerState, stateMap)
+
+                val command = rotateCommand ?: if (hasFrontEnemy(
+                        stateMap = stateMap,
+                        myPlayerState = myPlayerState,
+                        arenaX = arenaX,
+                        arenaY = arenaY
+                    )
+                ) "T" else "F"
+
                 return@flatMap ServerResponse.ok().body(Mono.just(command))
             }
         }
