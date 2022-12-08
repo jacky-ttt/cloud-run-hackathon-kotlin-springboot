@@ -28,7 +28,11 @@ class SquareGrid(width: Int, height: Int, barriers: List<Barrier>) : Grid(barrie
     private val widthRange: IntRange = (0 until width)
 
     private val validMoves =
-        listOf(Pair(1, 0), Pair(-1, 0), Pair(0, 1), Pair(0, -1), Pair(1, 1), Pair(-1, 1), Pair(1, -1), Pair(-1, -1))
+        listOf(
+            Pair(1, 0), Pair(-1, 0), Pair(0, 1), Pair(0, -1),
+            // disallow diagonal
+//            Pair(1, 1), Pair(-1, 1), Pair(1, -1), Pair(-1, -1)
+        )
 
     override fun getNeighbours(position: GridPosition): List<GridPosition> = validMoves
         .map { GridPosition(position.first + it.first, position.second + it.second) }
@@ -111,7 +115,11 @@ fun main(args: Array<String>) {
         )
     )
 
-    val (path, cost) = aStarSearch(GridPosition(0, 0), GridPosition(7, 7), SquareGrid(8, 8, barriers))
+    val (path, cost) = aStarSearch(
+        start = GridPosition(0, 0),
+        finish = GridPosition(7, 7),
+        grid = SquareGrid(width = 8, height = 8, barriers = barriers)
+    )
 
     println("Cost: $cost  Path: $path")
 }
