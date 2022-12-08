@@ -82,14 +82,7 @@ class KotlinApplication {
         return false
     }
 
-    fun isFrontAvailable(
-        stateMap: Map<String, PlayerState>,
-        myPlayerState: PlayerState,
-        arenaX: Int,
-        arenaY: Int
-    ): Boolean {
-        var isFrontAvailable = false
-        val myLocationDirection = myPlayerState.direction
+    fun isFrontAvailable(): Boolean {
         val myLocationX = myPlayerState.x
         val myLocationY = myPlayerState.y
         var frontX = myLocationX
@@ -116,12 +109,10 @@ class KotlinApplication {
             }
         }
         if (frontX < 0 || frontX > arenaX - 1) {
-            isFrontAvailable = false
-            return isFrontAvailable
+            return false
         }
         if (frontY < 0 || frontY > arenaY - 1) {
-            isFrontAvailable = false
-            return isFrontAvailable
+            return false
         }
         return !findEnemyAt(stateMap = stateMap, x = frontX, y = frontY)
     }
@@ -457,6 +448,15 @@ class KotlinApplication {
                 lowest = getLowestScorePlayerOrNull()
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
                 println("lowest: ${lowest.direction},${lowest.x}, ${lowest.y}")
+
+
+                if (myPlayerState.wasHit) {
+                    if (isFrontAvailable()) {
+                        return@flatMap ServerResponse.ok().body(Mono.just("F"))
+                    } else {
+                        return@flatMap ServerResponse.ok().body(Mono.just("R"))
+                    }
+                }
 
 
                 // find proper command---------------------------------------------------------------
