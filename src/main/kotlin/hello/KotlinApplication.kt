@@ -183,18 +183,17 @@ class KotlinApplication {
                 return@flatMap if (hasFrontEnemy) {
                     ServerResponse.ok().body(Mono.just("T"))
                 } else {
-                    ServerResponse.ok().body(Mono.just("R"))
-//                    if (isFrontAvailable(
-//                            stateMap = stateMap,
-//                            myPlayerState = myPlayerState,
-//                            arenaX = arenaX,
-//                            arenaY = arenaY
-//                        )
-//                    ) {
-//                        ServerResponse.ok().body(Mono.just("F"))
-//                    } else {
-//                        ServerResponse.ok().body(Mono.just("R"))
-//                    }
+                    if (isFrontAvailable(
+                            stateMap = stateMap,
+                            myPlayerState = myPlayerState,
+                            arenaX = arenaX,
+                            arenaY = arenaY
+                        )
+                    ) {
+                        ServerResponse.ok().body(Mono.just("F"))
+                    } else {
+                        ServerResponse.ok().body(Mono.just("R"))
+                    }
                 }
             }
         }
