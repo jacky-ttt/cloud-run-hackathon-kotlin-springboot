@@ -39,7 +39,7 @@ class KotlinApplication {
                 if (myLocationY == 0) {
                     return false
                 }
-                val minY = min(0, myLocationY - 3)
+                val minY = min(0, myLocationY - 1)
                 for (y in myLocationY - 1 downTo minY) {
                     if (findEnemyAt(stateMap = stateMap, x = myLocationX, y = y)) {
                         return true
@@ -51,7 +51,7 @@ class KotlinApplication {
                 if (myLocationX == arenaX - 1) {
                     return false
                 }
-                val maxX = max(arenaX, myLocationX + 3)
+                val maxX = max(arenaX, myLocationX + 1)
                 for (x in (myLocationX + 1) until maxX) {
                     if (findEnemyAt(stateMap = stateMap, x = x, y = myLocationY)) {
                         return true
@@ -63,7 +63,7 @@ class KotlinApplication {
                 if (myLocationY == arenaY - 1) {
                     return false
                 }
-                val maxY = max(arenaX, myLocationY + 3)
+                val maxY = max(arenaX, myLocationY + 1)
                 for (y in myLocationY + 1 until maxY) {
                     if (findEnemyAt(stateMap = stateMap, x = myLocationX, y = y)) {
                         return true
@@ -75,7 +75,7 @@ class KotlinApplication {
                 if (myLocationX == 0) {
                     return false
                 }
-                val minX = min(0, myLocationX - 3)
+                val minX = min(0, myLocationX - 1)
                 for (x in (myLocationX - 1) downTo minX) {
                     if (findEnemyAt(stateMap = stateMap, x = x, y = myLocationY)) {
                         return true
