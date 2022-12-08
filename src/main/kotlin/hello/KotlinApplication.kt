@@ -156,7 +156,7 @@ class KotlinApplication {
                 val myLocationWasHit = myLocation.wasHit
 
 
-                ServerResponse.ok().body(Mono.just("R"))
+                ServerResponse.ok().body(Mono.just("L"))
 //                if (myLocationWasHit) {
 //                    // move to available space
 //                    if (isFrontAvailable(
