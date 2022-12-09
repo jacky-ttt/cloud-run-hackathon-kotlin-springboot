@@ -630,6 +630,7 @@ class KotlinApplication {
                 // find the least effort move, calculate coefficient=move cost + not moving value + score
                 val command = runClosestNonMovingPlayerWithFireRange() ?: runClosestNonMovingPlayer()
                 if (command != null) {
+                    println("has real command")
                     return@flatMap ServerResponse.ok().body(Mono.just(command))
                 }
 
