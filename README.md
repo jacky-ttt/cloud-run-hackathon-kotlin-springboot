@@ -8,3 +8,6 @@ Run Locally:
 ./mvnw spring-boot:run
 ```
 
+a star alog reference:
+https://rosettacode.org/wiki/A*_search_algorithm#Kotlin  
+
