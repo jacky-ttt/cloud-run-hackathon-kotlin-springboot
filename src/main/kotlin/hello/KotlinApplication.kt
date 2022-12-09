@@ -532,6 +532,44 @@ class KotlinApplication {
         }
     }
 
+    fun runClosestNonMovingPlayerWithFireRange(): String? {
+        val (closestX, closestY) = getClosestNonMovingPlayer()
+        val (path, cost) = aStarSearch(
+            start = GridPosition(myPlayerState.x, myPlayerState.y),
+            finish = GridPosition(closestX, closestY),
+            grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMapWithFireRange())
+        )
+        println("Cost: $cost  Path: $path")
+
+
+        if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
+            val nextPosition = path[1]
+            val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
+
+            return rotateCommand ?: "F"
+        }
+        return null
+    }
+
+    fun runClosestNonMovingPlayer(): String? {
+        val (closestX, closestY) = getClosestNonMovingPlayer()
+        val (path, cost) = aStarSearch(
+            start = GridPosition(myPlayerState.x, myPlayerState.y),
+            finish = GridPosition(closestX, closestY),
+            grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
+        )
+        println("Cost: $cost  Path: $path")
+
+
+        if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
+            val nextPosition = path[1]
+            val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
+
+            return rotateCommand ?: "F"
+        }
+        return null
+    }
+
     @Bean
     fun routes() = router {
         GET {
@@ -602,20 +640,8 @@ class KotlinApplication {
 
                 // TODO find the least effort move, calculate coefficient=move cost + not moving value + score
                 // find the closest target
-                val (closestX, closestY) = getClosestNonMovingPlayer()
-                val (path, cost) = aStarSearch(
-                    start = GridPosition(myPlayerState.x, myPlayerState.y),
-                    finish = GridPosition(closestX, closestY),
-                    grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
-                )
-                println("Cost: $cost  Path: $path")
-
-
-                if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
-                    val nextPosition = path[1]
-                    val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
-
-                    val command = rotateCommand ?: "F"
+                val command = runClosestNonMovingPlayerWithFireRange() ?: runClosestNonMovingPlayer()
+                if (command != null) {
                     return@flatMap ServerResponse.ok().body(Mono.just(command))
                 }
 
