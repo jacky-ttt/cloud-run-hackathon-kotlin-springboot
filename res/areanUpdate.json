@@ -1,0 +1,246 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://cloud-run-hackathon-kotlin-springboot-mqssvhxgya-uc.a.run.app"
+    }
+  },
+  "arena": {
+    "state": {
+      "https://cloud-run-hackathon-go-pkqx6rxn2q-uc.a.run.app": {
+        "score": 706,
+        "y": 3,
+        "wasHit": false,
+        "direction": "N",
+        "x": 0
+      },
+      "https://cloud-run-hackathon-python-c5p6tue2hq-uc.a.run.app": {
+        "score": -1115,
+        "direction": "E",
+        "x": 0,
+        "y": 1,
+        "wasHit": true
+      },
+      "https://cloud-run-hackathon-go-e2jmkqysja-uc.a.run.app": {
+        "y": 6,
+        "wasHit": true,
+        "score": -353,
+        "direction": "E",
+        "x": 15
+      },
+      "https://cloud-run-hackathon-nodejs-qwe5r3jila-uc.a.run.app": {
+        "wasHit": false,
+        "direction": "E",
+        "y": 1,
+        "x": 11,
+        "score": 96
+      },
+      "https://mod3-vyauhuscja-uc.a.run.app/": {
+        "score": -612,
+        "direction": "S",
+        "y": 8,
+        "wasHit": false,
+        "x": 0
+      },
+      "https://cloud-run-hackathon-go-3qay7lmpuq-uc.a.run.app": {
+        "direction": "S",
+        "wasHit": true,
+        "score": -662,
+        "y": 1,
+        "x": 1
+      },
+      "https://cloud-run-hackathon-kotlin-springboot-mqssvhxgya-uc.a.run.app": {
+        "direction": "N",
+        "score": -427,
+        "x": 4,
+        "wasHit": true,
+        "y": 11
+      },
+      "https://cloud-run-hackathon-python-vyauhuscja-uc.a.run.app/": {
+        "wasHit": true,
+        "direction": "W",
+        "score": 185,
+        "y": 4,
+        "x": 6
+      },
+      "https://cloud-run-hackathon-java-springboot-lfr2jss3tq-uc.a.run.app": {
+        "direction": "W",
+        "wasHit": true,
+        "y": 0,
+        "x": 16,
+        "score": 667
+      },
+      "https://testhello-ta3hpinjzq-ts.a.run.app": {
+        "wasHit": false,
+        "direction": "S",
+        "score": -670,
+        "x": 5,
+        "y": 11
+      },
+      "https://waterfight-final-practice-04-x2wnjf2lxq-uc.a.run.app": {
+        "score": 783,
+        "direction": "E",
+        "wasHit": false,
+        "y": 1,
+        "x": 12
+      },
+      "https://mod2-hack-vyauhuscja-uc.a.run.app/": {
+        "x": 10,
+        "score": 393,
+        "direction": "N",
+        "wasHit": false,
+        "y": 8
+      },
+      "https://derrick-bot-tsxbksy6yq-uc.a.run.app": {
+        "score": 552,
+        "direction": "S",
+        "wasHit": false,
+        "y": 0,
+        "x": 5
+      },
+      "https://cloud-run-hackathon-python-xp5leyhpkq-uc.a.run.app": {
+        "direction": "S",
+        "score": -480,
+        "y": 3,
+        "x": 6,
+        "wasHit": true
+      },
+      "https://cloud-run-hackathon-nodejs-yuav3ace7a-uc.a.run.app": {
+        "y": 10,
+        "wasHit": true,
+        "x": 9,
+        "direction": "S",
+        "score": 680
+      },
+      "https://cloud-run-hackathon-python-og36l62xga-uc.a.run.app": {
+        "direction": "E",
+        "x": 15,
+        "y": 0,
+        "wasHit": true,
+        "score": -1843
+      },
+      "https://bot-tsxbksy6yq-uc.a.run.app": {
+        "x": 7,
+        "score": 388,
+        "y": 4,
+        "wasHit": false,
+        "direction": "W"
+      },
+      "https://cloud-run-hackathon-nodejs-temp-yuav3ace7a-uc.a.run.app": {
+        "direction": "S",
+        "x": 10,
+        "wasHit": false,
+        "y": 0,
+        "score": 563
+      },
+      "https://cloud-hackathon-qm4m7zrgea-uc.a.run.app": {
+        "wasHit": true,
+        "x": 15,
+        "y": 3,
+        "direction": "N",
+        "score": 360
+      },
+      "https://hackmod1-vyauhuscja-uc.a.run.app/": {
+        "score": 710,
+        "y": 2,
+        "direction": "N",
+        "wasHit": false,
+        "x": 1
+      },
+      "https://cloud-run-hackathon-go-7rxmeiyr7a-uc.a.run.app": {
+        "wasHit": false,
+        "y": 6,
+        "score": -499,
+        "direction": "N",
+        "x": 5
+      },
+      "https://cloud-run-hackathon-java-springboot-v2-b2-lfr2jss3tq-uc.a.run.app/": {
+        "wasHit": false,
+        "x": 12,
+        "score": 275,
+        "y": 11,
+        "direction": "N"
+      },
+      "https://cloud-run-hackathon-java-springboot-tw-ce-tsxbksy6yq-uc.a.run.app": {
+        "wasHit": false,
+        "y": 4,
+        "score": 254,
+        "x": 13,
+        "direction": "E"
+      },
+      "https://www.master-7rqtwti-dv3kavhf7enro.us-2.platformsh.site/": {
+        "wasHit": false,
+        "y": 8,
+        "score": -852,
+        "direction": "N",
+        "x": 11
+      },
+      "https://gcp-hackathon-cloud-run-3ioxqvrgga-uc.a.run.app": {
+        "wasHit": false,
+        "direction": "S",
+        "score": 473,
+        "x": 4,
+        "y": 8
+      },
+      "https://cloud-run-hackathon-java-springboot3-lfr2jss3tq-uc.a.run.app/": {
+        "y": 2,
+        "direction": "E",
+        "x": 5,
+        "score": 253,
+        "wasHit": true
+      },
+      "https://cloud-run-hackathon-go-fanliu-pkqx6rxn2q-uc.a.run.app": {
+        "direction": "S",
+        "score": 436,
+        "y": 0,
+        "wasHit": false,
+        "x": 0
+      },
+      "https://waterfight-guard-x2wnjf2lxq-uc.a.run.app": {
+        "direction": "S",
+        "x": 15,
+        "y": 1,
+        "wasHit": true,
+        "score": -36
+      },
+      "https://cloud-run-hackathon-java-springboot-v2-b1-lfr2jss3tq-uc.a.run.app/": {
+        "wasHit": false,
+        "y": 10,
+        "x": 11,
+        "score": 440,
+        "direction": "W"
+      },
+      "https://cloud-run-hackathon-java-springboot2-lfr2jss3tq-uc.a.run.app/": {
+        "x": 14,
+        "direction": "E",
+        "wasHit": false,
+        "y": 0,
+        "score": 345
+      },
+      "https://cloud-run-hackathon-nodejs-temp-1-yuav3ace7a-uc.a.run.app": {
+        "y": 10,
+        "direction": "W",
+        "score": -932,
+        "wasHit": true,
+        "x": 12
+      },
+      "https://cloud-run-hackathon-python-e7jflwxriq-uc.a.run.app": {
+        "direction": "E",
+        "score": -619,
+        "y": 11,
+        "wasHit": false,
+        "x": 15
+      },
+      "https://hackmod1-1-vyauhuscja-uc.a.run.app/": {
+        "y": 6,
+        "score": 541,
+        "wasHit": false,
+        "x": 13,
+        "direction": "E"
+      }
+    },
+    "dims": [
+      17,
+      12
+    ]
+  }
+}
