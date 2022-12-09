@@ -368,7 +368,7 @@ class KotlinApplication {
             }
             tempSet.add(Pair(v.x, v.y))
         }
-
+        println("getBarrierFromStateMapWithFireRange: ${Gson().toJson(tempSet)}")
         return listOf(tempSet.toSet())
     }
 
