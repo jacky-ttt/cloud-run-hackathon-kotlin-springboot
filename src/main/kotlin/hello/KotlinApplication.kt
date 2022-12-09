@@ -617,7 +617,8 @@ class KotlinApplication {
                     val closest = getClosestPlayer()
                     val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
                     val defaultCommand = rotateCommand ?: "F"
-                    return@flatMap ServerResponse.ok().body(Mono.just(listOf(defaultCommand, "T").random()))
+                    return@flatMap ServerResponse.ok()
+                        .body(Mono.just(listOfNotNull(defaultCommand, if (hasFrontEnemy()) "T" else null).random()))
                 }
 
                 if (hasFrontEnemy()) {
@@ -635,7 +636,8 @@ class KotlinApplication {
                 val closest = getClosestPlayer()
                 val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
                 val defaultCommand = rotateCommand ?: "F"
-                return@flatMap ServerResponse.ok().body(Mono.just(listOf(defaultCommand, "T").random()))
+                return@flatMap ServerResponse.ok()
+                    .body(Mono.just(listOfNotNull(defaultCommand, if (hasFrontEnemy()) "T" else null).random()))
 
 //                // find proper command---------------------------------------------------------------
 //                val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(lowest)
