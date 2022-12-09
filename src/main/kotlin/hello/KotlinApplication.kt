@@ -425,10 +425,10 @@ class KotlinApplication {
         stay = 0
     )
 
-    var barrierStateMap: Map<String, PlayerStateWithStay> = mapOf("-1" to dummyPlayerStateWithStay)
+    var stayStateMap: Map<String, PlayerStateWithStay> = mapOf("-1" to dummyPlayerStateWithStay)
 
-    fun updateStateMapWithPlayers(newStateMap: Map<String, PlayerState>): Map<String, PlayerStateWithStay> {
-        val oldStateMap = barrierStateMap.toMap()
+    fun updateStayStateMap(newStateMap: Map<String, PlayerState>): Map<String, PlayerStateWithStay> {
+        val oldStateMap = stayStateMap.toMap()
         return newStateMap.mapValues { (k, v) ->
             var tempStay = 0
 
@@ -465,12 +465,12 @@ class KotlinApplication {
                 val arenaSize = arenaUpdate.arena.dims
                 arenaX = arenaSize[0]
                 arenaY = arenaSize[1]
-                barrierStateMap = updateStateMapWithPlayers(newStateMap = arenaUpdate.arena.state)
+                stayStateMap = updateStayStateMap(newStateMap = arenaUpdate.arena.state)
                 stateMap = arenaUpdate.arena.state
                 myPlayerState = stateMap[mySelf]
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
-                println("barrierStateMap: ${Gson().toJson(barrierStateMap)}")
+                println("stayStateMap: ${Gson().toJson(stayStateMap)}")
                 println("myPlayerState: ${Gson().toJson(myPlayerState)}")
 //                println(Gson().toJson(myPlayerState))
 //                println(myPlayerState)
