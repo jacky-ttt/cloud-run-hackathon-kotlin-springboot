@@ -436,6 +436,19 @@ class KotlinApplication {
         return Pair(closest.x, closest.y)
     }
 
+    fun getClosestNonMovingPlayer(): GridPosition {
+        var closest = stayStateMap.toList().filter { (k, v) ->
+            k != mySelf
+        }.minByOrNull { (k, v) ->
+            (sqrt(
+                ((v.x - myPlayerState.x) * (v.x - myPlayerState.x) +
+                        (v.y - myPlayerState.y) * (v.y - myPlayerState.y)).toDouble()
+            ))
+        }?.second
+        closest = closest ?: dummyPlayerStateWithStay
+        return Pair(closest.x, closest.y)
+    }
+
     fun getClosestAvailableSpace(): GridPosition {
         val barrier: Barrier = getBarrierFromStateMapWithFireRange().firstOrNull()
             ?: setOf(Pair(myPlayerState.x, myPlayerState.y))
@@ -585,13 +598,26 @@ class KotlinApplication {
                     return@flatMap ServerResponse.ok().body(Mono.just("T"))
                 }
 
+                // TODO find the least effort move, calculate coefficient=move cost + not moving value + score
                 // find the closest target
-                val closest = getClosestPlayer()
-                val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
+                val (closestX, closestY) = getClosestNonMovingPlayer()
+                val (path, cost) = aStarSearch(
+                    start = GridPosition(myPlayerState.x, myPlayerState.y),
+                    finish = GridPosition(closestX, closestY),
+                    grid = SquareGrid(width = arenaX, height = arenaY, barriers = getBarrierFromStateMap())
+                )
+                println("Cost: $cost  Path: $path")
 
-                val command = rotateCommand ?: "F"
-                return@flatMap ServerResponse.ok().body(Mono.just(command))
 
+                if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
+                    val nextPosition = path[1]
+                    val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
+
+                    val command = rotateCommand ?: "F"
+                    return@flatMap ServerResponse.ok().body(Mono.just(command))
+                }
+
+                return@flatMap ServerResponse.ok().body(Mono.just(listOf("F", "R", "T").random()))
 
 //                // find proper command---------------------------------------------------------------
 //                val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(lowest)
