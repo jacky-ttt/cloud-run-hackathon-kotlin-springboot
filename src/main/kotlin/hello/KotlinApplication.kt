@@ -448,6 +448,7 @@ class KotlinApplication {
             )) - v.stay * stayCoefficient + v.score * scoreCoefficient
         }?.second
         closest = closest ?: dummyPlayerStateWithStay
+        println("stayStateMap: ${Gson().toJson(stayStateMap)}")
         println("closest: ${closest.x}, ${closest.y}")
         return Pair(closest.x, closest.y)
     }
