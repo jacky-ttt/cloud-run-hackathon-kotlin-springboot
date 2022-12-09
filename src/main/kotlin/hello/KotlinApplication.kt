@@ -614,25 +614,10 @@ class KotlinApplication {
 //                        return@flatMap ServerResponse.ok().body(Mono.just(listOf("R", "L").random()))
 //                    }
 
-                    // find the least effort move out
-                    val (closestX, closestY) = getClosestAvailableSpace()
-                    val (path, cost) = aStarSearch(
-                        start = GridPosition(myPlayerState.x, myPlayerState.y),
-                        finish = GridPosition(closestX, closestY),
-                        grid = SquareGrid(
-                            width = arenaX,
-                            height = arenaY,
-                            barriers = getBarrierFromStateMapWithFireRange()
-                        )
-                    )
-                    if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
-                        val nextPosition = path[1]
-                        val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
-
-                        val command = rotateCommand ?: "F"
-                        return@flatMap ServerResponse.ok().body(Mono.just(command))
-                    }
-                    return@flatMap ServerResponse.ok().body(Mono.just(listOf("F", "R", "T").random()))
+                    val closest = getClosestPlayer()
+                    val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
+                    val defaultCommand = rotateCommand ?: "F"
+                    return@flatMap ServerResponse.ok().body(Mono.just(listOf(defaultCommand, "T").random()))
                 }
 
                 if (hasFrontEnemy()) {
