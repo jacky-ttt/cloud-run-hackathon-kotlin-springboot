@@ -327,6 +327,51 @@ class KotlinApplication {
         return listOf(pointSet)
     }
 
+    fun getBarrierFromStateMapWithFireRange(): List<Barrier> {
+        val tempSet = mutableSetOf<Pair<Int, Int>>()
+        val detectRange = 3
+        stateMap.filter { (k, v) ->
+            k != mySelf
+        }.forEach { (k, v) ->
+            when (v.direction) {
+                "N" -> {
+                    for (y in v.y - 1 downTo v.y - detectRange) {
+                        if (isValidCoordinate(Coordinate(v.x, y))) {
+                            tempSet.add(Pair(v.x, y))
+                        }
+                    }
+                }
+
+                "E" -> {
+                    for (x in (v.x + 1)..v.x + detectRange) {
+                        if (isValidCoordinate(Coordinate(x, v.y))) {
+                            tempSet.add(Pair(x, v.y))
+                        }
+                    }
+                }
+
+                "S" -> {
+                    for (y in v.y + 1..v.y + detectRange) {
+                        if (isValidCoordinate(Coordinate(v.x, y))) {
+                            tempSet.add(Pair(v.x, y))
+                        }
+                    }
+                }
+
+                "W" -> {
+                    for (x in (v.x - 1) downTo v.x - detectRange) {
+                        if (isValidCoordinate(Coordinate(x, v.y))) {
+                            tempSet.add(Pair(x, v.y))
+                        }
+                    }
+                }
+            }
+            tempSet.add(Pair(v.x, v.y))
+        }
+
+        return listOf(tempSet.toSet())
+    }
+
     fun getRotateCommandPointingToTargetPlayer(position: GridPosition): String? {
         val (targetX, targetY) = position
 
@@ -389,6 +434,29 @@ class KotlinApplication {
         }?.second
         closest = closest ?: myPlayerState
         return Pair(closest.x, closest.y)
+    }
+
+    fun getClosestAvailableSpace(): GridPosition {
+        val barrier: Barrier = getBarrierFromStateMapWithFireRange().firstOrNull()
+            ?: setOf(Pair(myPlayerState.x, myPlayerState.y))
+
+        val availableSpace = mutableSetOf<Pair<Int, Int>>()
+        for (x in 0 until arenaX) {
+            for (y in 0 until arenaY) {
+                if (!barrier.any { it.first == x && it.second == y }) {
+                    availableSpace.add(Pair(x, y))
+                }
+            }
+        }
+
+        val closest = availableSpace.toList().minByOrNull { (x, y) ->
+            (sqrt(
+                ((x - myPlayerState.x) * (x - myPlayerState.x) +
+                        (y - myPlayerState.y) * (y - myPlayerState.y)).toDouble()
+            ))
+        }
+
+        return closest ?: Pair(myPlayerState.x, myPlayerState.y)
     }
 
     var myPlayerState: PlayerState = PlayerState(
@@ -485,11 +553,31 @@ class KotlinApplication {
 
 
                 if (myPlayerState.wasHit) {
-                    if (isFrontAvailable()) {
-                        return@flatMap ServerResponse.ok().body(Mono.just("F"))
-                    } else {
-                        return@flatMap ServerResponse.ok().body(Mono.just(listOf("R", "L").random()))
+//                    if (isFrontAvailable()) {
+//                        return@flatMap ServerResponse.ok().body(Mono.just("F"))
+//                    } else {
+//                        return@flatMap ServerResponse.ok().body(Mono.just(listOf("R", "L").random()))
+//                    }
+
+                    // find the least effort move out
+                    val (closestX, closestY) = getClosestAvailableSpace()
+                    val (path, cost) = aStarSearch(
+                        start = GridPosition(myPlayerState.x, myPlayerState.y),
+                        finish = GridPosition(closestX, closestY),
+                        grid = SquareGrid(
+                            width = arenaX,
+                            height = arenaY,
+                            barriers = getBarrierFromStateMapWithFireRange()
+                        )
+                    )
+                    if (path.isNotEmpty() && path.size >= 2 && cost in 1 until Int.MAX_VALUE) {
+                        val nextPosition = path[1]
+                        val rotateCommand = getRotateCommandPointingToTargetPlayer(nextPosition)
+
+                        val command = rotateCommand ?: "F"
+                        return@flatMap ServerResponse.ok().body(Mono.just(command))
                     }
+                    return@flatMap ServerResponse.ok().body(Mono.just(listOf("F", "R", "T").random()))
                 }
 
                 if (hasFrontEnemy()) {
