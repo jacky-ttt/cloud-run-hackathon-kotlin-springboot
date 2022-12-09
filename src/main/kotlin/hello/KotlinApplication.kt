@@ -608,17 +608,18 @@ class KotlinApplication {
 
 
                 if (myPlayerState.wasHit) {
-//                    if (isFrontAvailable()) {
-//                        return@flatMap ServerResponse.ok().body(Mono.just("F"))
-//                    } else {
-//                        return@flatMap ServerResponse.ok().body(Mono.just(listOf("R", "L").random()))
-//                    }
+                    if (isFrontAvailable()) {
+                        return@flatMap ServerResponse.ok().body(Mono.just("F"))
+                    } else {
+                        return@flatMap ServerResponse.ok()
+                            .body(Mono.just(listOfNotNull("R", "L", if (hasFrontEnemy()) "T" else null).random()))
+                    }
 
-                    val closest = getClosestPlayer()
-                    val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
-                    val defaultCommand = rotateCommand ?: "F"
-                    return@flatMap ServerResponse.ok()
-                        .body(Mono.just(listOfNotNull(defaultCommand, if (hasFrontEnemy()) "T" else null).random()))
+//                    val closest = getClosestPlayer()
+//                    val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
+//                    val defaultCommand = rotateCommand ?: "F"
+//                    return@flatMap ServerResponse.ok()
+//                        .body(Mono.just(listOfNotNull(defaultCommand, if (hasFrontEnemy()) "T" else null).random()))
                 }
 
                 if (hasFrontEnemy()) {
