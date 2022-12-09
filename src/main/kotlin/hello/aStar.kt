@@ -106,20 +106,23 @@ fun aStarSearch(start: GridPosition, finish: GridPosition, grid: Grid): Pair<Lis
     return Pair<List<GridPosition>, Int>(emptyList(), Int.MAX_VALUE)
 }
 
-//fun main(args: Array<String>) {
-//
-//    val barriers = listOf(
-//        setOf(
-//            Pair(2, 4), Pair(2, 5), Pair(2, 6), Pair(3, 6), Pair(4, 6), Pair(5, 6), Pair(5, 5),
-//            Pair(5, 4), Pair(5, 3), Pair(5, 2), Pair(4, 2), Pair(3, 2)
-//        )
-//    )
-//
-//    val (path, cost) = aStarSearch(
-//        start = GridPosition(0, 0),
-//        finish = GridPosition(7, 7),
-//        grid = SquareGrid(width = 8, height = 8, barriers = barriers)
-//    )
-//
-//    println("Cost: $cost  Path: $path")
-//}
+fun main(args: Array<String>) {
+
+    val barriers = listOf(
+        setOf(
+//            Pair(0, 1),
+//            Pair(1, 0),
+//            Pair(1, 1),
+            Pair(2, 4), Pair(2, 5), Pair(2, 6), Pair(3, 6), Pair(4, 6), Pair(5, 6), Pair(5, 5),
+            Pair(5, 4), Pair(5, 3), Pair(5, 2), Pair(4, 2), Pair(3, 2)
+        )
+    )
+
+    val (path, cost) = aStarSearch(
+        start = GridPosition(1, 0),
+        finish = GridPosition(1, 0),
+        grid = SquareGrid(width = 8, height = 8, barriers = barriers)
+    )
+
+    println("Cost: $cost  Path: $path")
+}
