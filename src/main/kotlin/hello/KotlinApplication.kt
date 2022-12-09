@@ -416,6 +416,38 @@ class KotlinApplication {
     var arenaX = 0
     var arenaY = 0
     var mySelf = ""
+    val dummyPlayerStateWithStay = PlayerStateWithStay(
+        x = -1,
+        y = -1,
+        direction = "N",
+        score = -1,
+        wasHit = false,
+        stay = 0
+    )
+
+    var barrierStateMap: Map<String, PlayerStateWithStay> = mapOf("-1" to dummyPlayerStateWithStay)
+
+    fun updateStateMapWithPlayers(newStateMap: Map<String, PlayerState>): Map<String, PlayerStateWithStay> {
+        val oldStateMap = barrierStateMap.toMap()
+        return newStateMap.mapValues { (k, v) ->
+            var tempStay = 0
+
+            oldStateMap[k]?.let {
+                if (v.x == it.x && v.y == it.y) {
+                    tempStay = it.stay + 1
+                }
+            }
+
+            PlayerStateWithStay(
+                x = v.x,
+                y = v.y,
+                direction = v.direction,
+                score = v.score,
+                wasHit = v.wasHit,
+                stay = tempStay
+            )
+        }
+    }
 
     @Bean
     fun routes() = router {
@@ -433,10 +465,12 @@ class KotlinApplication {
                 val arenaSize = arenaUpdate.arena.dims
                 arenaX = arenaSize[0]
                 arenaY = arenaSize[1]
+                barrierStateMap = updateStateMapWithPlayers(newStateMap = arenaUpdate.arena.state)
                 stateMap = arenaUpdate.arena.state
                 myPlayerState = stateMap[mySelf]
                     ?: return@flatMap ServerResponse.ok().body(Mono.just("T"))
 
+                println("barrierStateMap: ${Gson().toJson(barrierStateMap)}")
                 println("myPlayerState: ${Gson().toJson(myPlayerState)}")
 //                println(Gson().toJson(myPlayerState))
 //                println(myPlayerState)
@@ -575,6 +609,15 @@ data class PlayerState(
     val direction: String,
     val score: Int,
     val wasHit: Boolean
+)
+
+data class PlayerStateWithStay(
+    val x: Int,
+    val y: Int,
+    val direction: String,
+    val score: Int,
+    val wasHit: Boolean,
+    val stay: Int
 )
 
 data class Links(val self: Self)
