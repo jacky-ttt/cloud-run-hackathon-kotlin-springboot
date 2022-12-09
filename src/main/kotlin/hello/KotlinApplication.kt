@@ -437,8 +437,8 @@ class KotlinApplication {
     }
 
     fun getClosestNonMovingPlayer(): GridPosition {
-        val stayCoefficient = 1
-        val scoreCoefficient = 1
+        val stayCoefficient = 1.5
+        val scoreCoefficient = 1.5
         var closest = stayStateMap.toList().filter { (k, v) ->
             k != mySelf
         }.minByOrNull { (k, v) ->
