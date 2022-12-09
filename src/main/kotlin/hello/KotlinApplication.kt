@@ -448,6 +448,7 @@ class KotlinApplication {
             )) - v.stay * stayCoefficient + v.score * scoreCoefficient
         }?.second
         closest = closest ?: dummyPlayerStateWithStay
+        println("closest: ${closest.x}, ${closest.y}")
         return Pair(closest.x, closest.y)
     }
 
