@@ -437,13 +437,15 @@ class KotlinApplication {
     }
 
     fun getClosestNonMovingPlayer(): GridPosition {
+        val stayCoefficient = 1
+        val scoreCoefficient = 1
         var closest = stayStateMap.toList().filter { (k, v) ->
             k != mySelf
         }.minByOrNull { (k, v) ->
             (sqrt(
                 ((v.x - myPlayerState.x) * (v.x - myPlayerState.x) +
                         (v.y - myPlayerState.y) * (v.y - myPlayerState.y)).toDouble()
-            ))
+            )) - v.stay * stayCoefficient + v.score * scoreCoefficient
         }?.second
         closest = closest ?: dummyPlayerStateWithStay
         return Pair(closest.x, closest.y)
