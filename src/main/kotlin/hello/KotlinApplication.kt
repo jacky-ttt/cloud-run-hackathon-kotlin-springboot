@@ -638,14 +638,17 @@ class KotlinApplication {
                     return@flatMap ServerResponse.ok().body(Mono.just("T"))
                 }
 
-                // TODO find the least effort move, calculate coefficient=move cost + not moving value + score
-                // find the closest target
+                // find the least effort move, calculate coefficient=move cost + not moving value + score
                 val command = runClosestNonMovingPlayerWithFireRange() ?: runClosestNonMovingPlayer()
                 if (command != null) {
                     return@flatMap ServerResponse.ok().body(Mono.just(command))
                 }
 
-                return@flatMap ServerResponse.ok().body(Mono.just(listOf("F", "R", "T").random()))
+                // can be trapped, find the closest target
+                val closest = getClosestPlayer()
+                val rotateCommand = getRotateCommandPointingToTargetPlayer(closest)
+                val defaultCommand = rotateCommand ?: "F"
+                return@flatMap ServerResponse.ok().body(Mono.just(listOf(defaultCommand, "T").random()))
 
 //                // find proper command---------------------------------------------------------------
 //                val (buttOrBestX, buttOrBestY) = getButtOrNextBestOfPlayer(lowest)
